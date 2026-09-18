@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-18T11:49:01+00:00",
+  "generatedAt": "2026-09-18T12:35:07+00:00",
   "assets": {
     "mission-1-banner": {
       "id": "mission-1-banner",
@@ -22,8 +22,9 @@
       "alt": null,
       "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
       "reviewStatus": "reviewed",
-      "compressedAt": "2026-09-18T11:49:01+00:00",
-      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 정답 단서 없음, 계열 일관."
+      "compressedAt": "2026-09-18T12:35:06+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관.",
+      "notes": "사용자 직접 생성(AI Studio 웹). 프롬프트 원문 미기록, 동일 지시 계열."
     },
     "mission-2-banner": {
       "id": "mission-2-banner",
@@ -47,8 +48,8 @@
       "alt": null,
       "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
       "reviewStatus": "reviewed",
-      "compressedAt": "2026-09-18T11:49:01+00:00",
-      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 정답 단서 없음, 계열 일관."
+      "compressedAt": "2026-09-18T12:35:06+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관."
     },
     "mission-3-banner": {
       "id": "mission-3-banner",
@@ -72,8 +73,158 @@
       "alt": null,
       "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
       "reviewStatus": "reviewed",
-      "compressedAt": "2026-09-18T11:49:01+00:00",
-      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 정답 단서 없음, 계열 일관."
+      "compressedAt": "2026-09-18T12:35:07+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관."
+    },
+    "planet-01-ocean": {
+      "id": "planet-01-ocean",
+      "purpose": "가상 행성 상상도 1 (바다 상상) — 보고 탭 상상도 갤러리",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [
+        "mission-1-banner"
+      ],
+      "sourceFile": "assets/raw/planet-01-ocean.png",
+      "shippedFile": "src/assets/planet-01-ocean.webp",
+      "dimensions": "768x768",
+      "bytes": 30156,
+      "overBudget": false,
+      "sha256_16": "b650a4f5715cef8b",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": "가상 행성 상상도: 바다와 구름이 있는 파란 행성 (관측 사진 아님)",
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T12:35:07+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관."
+    },
+    "planet-02-desert": {
+      "id": "planet-02-desert",
+      "purpose": "가상 행성 상상도 2 (사막 상상) — 보고 탭 상상도 갤러리",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [
+        "mission-1-banner"
+      ],
+      "sourceFile": "assets/raw/planet-02-desert.png",
+      "shippedFile": "src/assets/planet-02-desert.webp",
+      "dimensions": "768x768",
+      "bytes": 14280,
+      "overBudget": false,
+      "sha256_16": "73d4d67197beb52c",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": "가상 행성 상상도: 모래 언덕과 얇은 대기가 있는 행성 (관측 사진 아님)",
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T12:35:07+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관."
+    },
+    "planet-03-ice": {
+      "id": "planet-03-ice",
+      "purpose": "가상 행성 상상도 3 (얼음 상상) — 보고 탭 상상도 갤러리",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [
+        "mission-1-banner"
+      ],
+      "sourceFile": "assets/raw/planet-03-ice.png",
+      "shippedFile": "src/assets/planet-03-ice.webp",
+      "dimensions": "768x768",
+      "bytes": 8886,
+      "overBudget": false,
+      "sha256_16": "f6622e6fcd52ca63",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": "가상 행성 상상도: 얼음 표면과 금이 있는 행성 (관측 사진 아님)",
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T12:35:07+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관."
+    },
+    "planet-04-ringed": {
+      "id": "planet-04-ringed",
+      "purpose": "가상 행성 상상도 4 (고리 상상) — 보고 탭 상상도 갤러리",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [
+        "mission-1-banner"
+      ],
+      "sourceFile": "assets/raw/planet-04-ringed.png",
+      "shippedFile": "src/assets/planet-04-ringed.webp",
+      "dimensions": "768x768",
+      "bytes": 18748,
+      "overBudget": false,
+      "sha256_16": "f2d04fdde6b0f383",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": "가상 행성 상상도: 고리가 있는 행성 (관측 사진 아님)",
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T12:35:07+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관."
+    },
+    "planet-05-clouded": {
+      "id": "planet-05-clouded",
+      "purpose": "가상 행성 상상도 5 (구름 상상) — 보고 탭 상상도 갤러리",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [
+        "mission-1-banner"
+      ],
+      "sourceFile": "assets/raw/planet-05-clouded.png",
+      "shippedFile": "src/assets/planet-05-clouded.webp",
+      "dimensions": "768x768",
+      "bytes": 12372,
+      "overBudget": false,
+      "sha256_16": "dd5eb2ec4e5463a6",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": "가상 행성 상상도: 구름 띠로 덮인 행성 (관측 사진 아님)",
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T12:35:07+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관."
+    },
+    "planet-06-twotone": {
+      "id": "planet-06-twotone",
+      "purpose": "가상 행성 상상도 6 (한쪽만 낮이 계속되는 상상) — 보고 탭 상상도 갤러리",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [
+        "mission-1-banner"
+      ],
+      "sourceFile": "assets/raw/planet-06-twotone.png",
+      "shippedFile": "src/assets/planet-06-twotone.webp",
+      "dimensions": "768x768",
+      "bytes": 11266,
+      "overBudget": false,
+      "sha256_16": "c6be3ff759c29ce7",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": "가상 행성 상상도: 한쪽은 낮, 한쪽은 밤이 계속되는 행성 (관측 사진 아님)",
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T12:35:07+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 지구 대륙 없음, 정답 단서 없음, 계열 일관."
     }
   }
 }
