@@ -318,6 +318,7 @@ export interface ChangeEntry {
 export const CHANGELOG: ChangeEntry[] = [
   { date: '2026-09-17', text: '최초 개발: P0 합성 3종 미션, 원궤도 후보 비교, 관측 예산 3창, 결론 기록.' },
   { date: '2026-09-18', text: '미션 배경·상상도 자산 파이프라인과 상상도 갤러리 슬롯 추가 (자산 준비 시 표시).' },
+  { date: '2026-09-18', text: '미션 배경 상상 일러스트 3장 삽입 (Nano Banana 2 Lite 생성).' },
 ];
 
 /** 항상 찾을 수 있는 ‘업데이트 내역’ 다이얼로그 */

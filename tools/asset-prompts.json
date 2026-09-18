@@ -1,6 +1,6 @@
 {
-  "promptVersion": "v1",
-  "model": "gemini-2.5-flash-image",
+  "promptVersion": "v2-2lite",
+  "model": "gemini-3.1-flash-lite-image",
   "styleBase": "부드러운 교육용 삽화. 실제 관측 사진처럼 보이지 않게, 손으로 그린 듯 단순하고 평면적인 구아슈 느낌. 밝고 차분한 파스텔 색감(따뜻한 종이색 바탕). 문자·숫자·기호·워터마크 없음. 네온·렌즈플레어·SF 장식 없음.",
   "assets": [
     {
@@ -75,5 +75,6 @@
       "ui": "report/gallery",
       "prompt": "Same illustration style and palette as the reference image, but show a single imaginary planet: a soft rounded planet with one warm sunlit side and one cool shaded side, a gentle soft boundary between them, simple and calm, gentle shading from the upper left, centered on a plain warm paper background, generous margins. Friendly educational illustration for teenagers. Imaginary world, clearly an illustration, not a photograph, not an observation image. No text, no letters, no numbers, no labels, no watermark, no scale bar, no measurement marks."
     }
-  ]
+  ],
+  "modelNote": "사용자 승인 모델 변경 (2026-09-18): image 2.5(gemini-2.5-flash-image)는 무료 할당량 0으로 차단되어 Nano Banana 2 시도 후 동일 오류, 최종적으로 Nano Banana 2 Lite로 9장 생성."
 }

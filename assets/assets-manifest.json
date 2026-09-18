@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-18T11:49:01+00:00",
+  "assets": {
+    "mission-1-banner": {
+      "id": "mission-1-banner",
+      "purpose": "미션 1 배경 (또렷한 반복 신호) — 관측 탭 미션 카드 상단",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [],
+      "sourceFile": "assets/raw/mission-1-banner.png",
+      "shippedFile": "src/assets/mission-1-banner.webp",
+      "dimensions": "1280x714",
+      "bytes": 12012,
+      "overBudget": false,
+      "sha256_16": "b9b5eb3cf87273e4",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": null,
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T11:49:01+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 정답 단서 없음, 계열 일관."
+    },
+    "mission-2-banner": {
+      "id": "mission-2-banner",
+      "purpose": "미션 2 배경 (잡음 속 얕은 신호) — 관측 탭 미션 카드 상단",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [
+        "mission-1-banner"
+      ],
+      "sourceFile": "assets/raw/mission-2-banner.png",
+      "shippedFile": "src/assets/mission-2-banner.webp",
+      "dimensions": "1280x714",
+      "bytes": 14068,
+      "overBudget": false,
+      "sha256_16": "7ca717708a2c490c",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": null,
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T11:49:01+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 정답 단서 없음, 계열 일관."
+    },
+    "mission-3-banner": {
+      "id": "mission-3-banner",
+      "purpose": "미션 3 배경 (한 번의 감소) — 관측 탭 미션 카드 상단",
+      "promptVersion": "v2-2lite",
+      "modelUsed": "gemini-3.1-flash-lite-image",
+      "referenceIds": [
+        "mission-1-banner"
+      ],
+      "sourceFile": "assets/raw/mission-3-banner.png",
+      "shippedFile": "src/assets/mission-3-banner.webp",
+      "dimensions": "1280x714",
+      "bytes": 11994,
+      "overBudget": false,
+      "sha256_16": "b984249c4d48ef91",
+      "semanticLabels": [
+        "가상",
+        "상상 삽화",
+        "관측 아님"
+      ],
+      "alt": null,
+      "licenseNote": "AI 생성 삽화(사용자 생성). SynthID 워터마크 포함. 실제 관측 사진이 아니며 교육용 상상 삽화로만 표기. 미션 배경/상상도 용도.",
+      "reviewStatus": "reviewed",
+      "compressedAt": "2026-09-18T11:49:01+00:00",
+      "reviewNote": "2026-09-18 육안 검수: 문자·숫자 없음, 사진 느낌 없음, 정답 단서 없음, 계열 일관."
+    }
+  }
+}
