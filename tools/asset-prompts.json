@@ -1,0 +1,79 @@
+{
+  "promptVersion": "v1",
+  "model": "gemini-2.5-flash-image",
+  "styleBase": "부드러운 교육용 삽화. 실제 관측 사진처럼 보이지 않게, 손으로 그린 듯 단순하고 평면적인 구아슈 느낌. 밝고 차분한 파스텔 색감(따뜻한 종이색 바탕). 문자·숫자·기호·워터마크 없음. 네온·렌즈플레어·SF 장식 없음.",
+  "assets": [
+    {
+      "id": "mission-1-banner",
+      "purpose": "미션 1 배경 (또렷한 반복 신호) — 관측 탭 미션 카드 상단",
+      "aspectRatio": "16:9",
+      "referenceId": null,
+      "ui": "observe/mission-card",
+      "prompt": "A soft flat educational illustration for a teenage science classroom: a calm dawn sky over a gentle quiet hill horizon, one clear bright star shining steadily above the horizon, soft pastel palette of warm cream, pale blue and muted amber, smooth gouache-like shading, simple rounded shapes, minimal detail, generous negative space, wide banner composition with the subject centered and large safe margins. Friendly, calm, gentle. Clearly a hand-made illustration, not a photograph, not a telescope image. No text, no letters, no numbers, no labels, no watermark, no signature, no charts, no satellite, no rocket, no astronaut, no lens flare, no neon glow."
+    },
+    {
+      "id": "mission-2-banner",
+      "purpose": "미션 2 배경 (잡음 속 얕은 신호) — 관측 탭 미션 카드 상단",
+      "aspectRatio": "16:9",
+      "referenceId": "mission-1-banner",
+      "ui": "observe/mission-card",
+      "prompt": "Same illustration style, same palette and same horizon composition as the reference image. Change only the sky: a thin soft haze of translucent creamy clouds drifting across, the single star slightly veiled behind the haze, lower contrast, quieter and more textured sky. Keep the same gentle educational look, same safe margins, same centered star. Clearly a hand-made illustration, not a photograph. No text, no letters, no numbers, no labels, no watermark, no charts, no telescope."
+    },
+    {
+      "id": "mission-3-banner",
+      "purpose": "미션 3 배경 (한 번의 감소) — 관측 탭 미션 카드 상단",
+      "aspectRatio": "16:9",
+      "referenceId": "mission-1-banner",
+      "ui": "observe/mission-card",
+      "prompt": "Same illustration style, same palette and same horizon composition as the reference image. Change only the scene: a long quiet horizon under a mostly empty wide sky, one single small star low near the horizon, a lot of calm empty sky, a feeling of stillness and long waiting. Keep the same gentle educational look and large safe margins. Clearly a hand-made illustration, not a photograph. No text, no letters, no numbers, no labels, no watermark, no charts."
+    },
+    {
+      "id": "planet-01-ocean",
+      "purpose": "가상 행성 상상도 1 (바다 상상) — 보고 탭 상상도 갤러리",
+      "aspectRatio": "1:1",
+      "referenceId": "mission-1-banner",
+      "ui": "report/gallery",
+      "prompt": "Same illustration style and palette as the reference image, but show a single imaginary planet: a soft rounded planet with teal-blue oceans and pale cream cloud swirls, gentle shading from the upper left, centered on a plain warm paper background, generous margins. Friendly educational illustration for teenagers. Imaginary world, clearly an illustration, not a photograph, not an observation image. No text, no letters, no numbers, no labels, no watermark, no scale bar, no measurement marks, no spaceship."
+    },
+    {
+      "id": "planet-02-desert",
+      "purpose": "가상 행성 상상도 2 (사막 상상) — 보고 탭 상상도 갤러리",
+      "aspectRatio": "1:1",
+      "referenceId": "mission-1-banner",
+      "ui": "report/gallery",
+      "prompt": "Same illustration style and palette as the reference image, but show a single imaginary planet: a soft rounded planet of warm ochre and muted rose dunes with a thin pale haze, gentle shading from the upper left, centered on a plain warm paper background, generous margins. Friendly educational illustration for teenagers. Imaginary world, clearly an illustration, not a photograph, not an observation image. No text, no letters, no numbers, no labels, no watermark, no scale bar, no measurement marks."
+    },
+    {
+      "id": "planet-03-ice",
+      "purpose": "가상 행성 상상도 3 (얼음 상상) — 보고 탭 상상도 갤러리",
+      "aspectRatio": "1:1",
+      "referenceId": "mission-1-banner",
+      "ui": "report/gallery",
+      "prompt": "Same illustration style and palette as the reference image, but show a single imaginary planet: a soft rounded pale blue-white icy planet with gentle soft crack lines and faint frost, gentle shading from the upper left, centered on a plain warm paper background, generous margins. Friendly educational illustration for teenagers. Imaginary world, clearly an illustration, not a photograph, not an observation image. No text, no letters, no numbers, no labels, no watermark, no scale bar, no measurement marks."
+    },
+    {
+      "id": "planet-04-ringed",
+      "purpose": "가상 행성 상상도 4 (고리 상상) — 보고 탭 상상도 갤러리",
+      "aspectRatio": "1:1",
+      "referenceId": "mission-1-banner",
+      "ui": "report/gallery",
+      "prompt": "Same illustration style and palette as the reference image, but show a single imaginary planet: a soft rounded sand-colored planet with one muted dusty pale ring band tilted gently, simple and calm, gentle shading from the upper left, centered on a plain warm paper background, generous margins. Friendly educational illustration for teenagers. Imaginary world, clearly an illustration, not a photograph, not an observation image. No text, no letters, no numbers, no labels, no watermark, no scale bar, no measurement marks."
+    },
+    {
+      "id": "planet-05-clouded",
+      "purpose": "가상 행성 상상도 5 (구름 상상) — 보고 탭 상상도 갤러리",
+      "aspectRatio": "1:1",
+      "referenceId": "mission-1-banner",
+      "ui": "report/gallery",
+      "prompt": "Same illustration style and palette as the reference image, but show a single imaginary planet: a soft rounded planet wrapped in gentle horizontal pastel cloud bands in cream, dusty rose and pale sage, like a calm cloudy giant, gentle shading from the upper left, centered on a plain warm paper background, generous margins. Friendly educational illustration for teenagers. Imaginary world, clearly an illustration, not a photograph, not an observation image. No text, no letters, no numbers, no labels, no watermark, no scale bar, no measurement marks."
+    },
+    {
+      "id": "planet-06-twotone",
+      "purpose": "가상 행성 상상도 6 (한쪽만 낮이 계속되는 상상) — 보고 탭 상상도 갤러리",
+      "aspectRatio": "1:1",
+      "referenceId": "mission-1-banner",
+      "ui": "report/gallery",
+      "prompt": "Same illustration style and palette as the reference image, but show a single imaginary planet: a soft rounded planet with one warm sunlit side and one cool shaded side, a gentle soft boundary between them, simple and calm, gentle shading from the upper left, centered on a plain warm paper background, generous margins. Friendly educational illustration for teenagers. Imaginary world, clearly an illustration, not a photograph, not an observation image. No text, no letters, no numbers, no labels, no watermark, no scale bar, no measurement marks."
+    }
+  ]
+}

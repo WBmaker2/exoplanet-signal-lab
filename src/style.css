@@ -5,6 +5,7 @@
   --paper-deep: #f1ede1;
   --plate: #ffffff;
   --ink: #16181a;
+  --ink-deep: #000000;
   --ink-soft: #2b3138;
   --ink-faint: #4a545e;
   --hairline: #d9d4c6;
@@ -72,7 +73,7 @@ p { margin: 0 0 0.75rem; max-width: 68ch; }
 .tokenbar {
   position: sticky; top: 0; z-index: 40;
   background: var(--ink); color: #fff;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid var(--ink-deep);
 }
 .tokenbar-inner {
   max-width: 76rem; margin: 0 auto; padding: 0.5rem 1rem;
@@ -93,7 +94,7 @@ p { margin: 0 0 0.75rem; max-width: 68ch; }
 .step[aria-current="step"] { background: #fff; color: var(--ink); border-color: #fff; font-weight: 700; }
 .step:hover { border-color: #fff; }
 .update-link {
-  color: #fff; font-size: 0.8rem; background: transparent; border: 1px solid #4b5563;
+  color: #fff; font-size: 0.85rem; background: transparent; border: 1px solid #4b5563;
   border-radius: 999px; padding: 0.35rem 0.7rem; cursor: pointer; min-height: 44px; font: inherit;
 }
 .update-link:hover { border-color: #fff; }
@@ -120,7 +121,7 @@ p { margin: 0 0 0.75rem; max-width: 68ch; }
 .plate::after { bottom: 6px; right: 6px; border-bottom: 1px solid var(--hairline-strong); border-right: 1px solid var(--hairline-strong); }
 .plate-head { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
 .plate-head .tag {
-  font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em;
+  font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em;
   border: 1px solid var(--hairline-strong); border-radius: 4px; padding: 0.1rem 0.4rem;
   color: var(--ink-faint); text-transform: uppercase;
 }
@@ -137,7 +138,7 @@ canvas.curve { width: 100%; height: auto; display: block; border: 1px solid var(
 .ledger { display: grid; gap: 0.9rem; }
 .field { display: grid; gap: 0.3rem; padding: 0.6rem 0; border-top: 1px solid var(--hairline); }
 .field:first-child { border-top: none; }
-.field label { font-weight: 600; font-size: 0.95rem; }
+.field label { font-weight: 600; font-size: 1rem; }
 .field .hint { font-size: 0.82rem; color: var(--ink-faint); }
 .row { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
 .row > * { min-width: 0; }
@@ -159,7 +160,7 @@ button { font: inherit; }
 .btn:hover { background: var(--paper-deep); }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .btn.primary { background: var(--ink); color: #fff; }
-.btn.primary:hover { background: #000; }
+.btn.primary:hover { background: var(--ink-deep); }
 .btn.signal { background: var(--signal); border-color: var(--signal); color: #fff; }
 .btn.signal:hover { background: var(--signal-ink); }
 .btn.danger { border-color: var(--stamp); color: var(--stamp); }
@@ -193,7 +194,7 @@ button { font: inherit; }
 
 table.data { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
 table.data th, table.data td { text-align: left; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--hairline); }
-table.data th { font-size: 0.78rem; letter-spacing: 0.04em; color: var(--ink-faint); font-weight: 600; }
+table.data th { font-size: 0.75rem; letter-spacing: 0.04em; color: var(--ink-faint); font-weight: 600; }
 table.data td.num, table.data th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .table-wrap { overflow-x: auto; }
 
@@ -215,13 +216,38 @@ table.data td.num, table.data th.num { text-align: right; font-family: var(--fon
 .mission b { display: block; }
 .mission span { font-size: 0.85rem; color: var(--ink-soft); }
 
+/* 상상 일러스트 배너: 카드 안에서 도판처럼. 항상 '상상' 라벨을 함께 보여준다. */
+.mission-banner-wrap { position: relative; display: block; margin-bottom: 0.55rem; }
+.mission-banner {
+  display: block; width: 100%; aspect-ratio: 16 / 6.6;
+  object-fit: cover; object-position: center 42%;
+  border: 1px solid var(--hairline); border-radius: 8px;
+}
+.mission-banner-tag {
+  position: absolute; left: 0.45rem; top: 0.45rem;
+  font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em;
+  background: var(--paper); border: 1px solid var(--hairline-strong); border-radius: 4px;
+  padding: 0.05rem 0.35rem; color: var(--ink-faint);
+}
+
+/* 상상도 갤러리: 1:1 도판 격자 */
+.planet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); gap: 0.7rem; margin: 0.3rem 0 0.7rem; }
+.planet-card { margin: 0; border: 1px solid var(--hairline-strong); border-radius: 10px; background: #fff; overflow: hidden; }
+.planet-card img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-bottom: 1px solid var(--hairline); }
+.planet-card figcaption { display: grid; gap: 0.15rem; padding: 0.45rem 0.55rem 0.6rem; }
+.planet-card figcaption b { font-size: 0.9rem; }
+.planet-tag {
+  justify-self: start; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em;
+  border: 1px solid var(--amber); color: var(--amber); border-radius: 4px; padding: 0.05rem 0.35rem;
+}
+
 .scrub { display: grid; gap: 0.3rem; }
 .fallback-2d { border: 1px dashed var(--hairline-strong); border-radius: 8px; padding: 0.6rem; background: #fff; }
 .orbit-wrap { border: 1px solid var(--hairline); border-radius: 8px; background: #fff; overflow: hidden; }
 .orbit-wrap canvas, .orbit-wrap svg { display: block; width: 100%; height: auto; }
 
 .footer { color: var(--ink-faint); font-size: 0.82rem; padding: 1.5rem 0; }
-.footer code { font-family: var(--font-mono); font-size: 0.78rem; }
+.footer code { font-family: var(--font-mono); font-size: 0.75rem; }
 dialog.changelog { border: 1px solid var(--hairline-strong); border-radius: var(--radius); padding: 1.2rem; max-width: 32rem; }
 dialog.changelog::backdrop { background: rgba(22, 24, 26, 0.45); }
 

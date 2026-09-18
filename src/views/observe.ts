@@ -4,6 +4,14 @@ import type { LabSession } from './context';
 import { el, notice } from './ui';
 import { renderCurve } from './curve';
 
+// 자산은 assets/생성-가이드.md 규칙으로 생성되어 src/assets/에 들어온다.
+// 아직 없으면 빈 객체라 배너 없이 그대로 동작한다.
+const MISSION_BANNERS = import.meta.glob('../assets/mission-*-banner.webp', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>;
+
 export function buildObserveTab(session: LabSession): HTMLElement {
   const { state } = session;
   const wrap = el('div', { class: 'ledger' });
@@ -20,6 +28,20 @@ export function buildObserveTab(session: LabSession): HTMLElement {
       type: 'button',
       'aria-pressed': state.missionId === m.id ? 'true' : 'false',
     });
+    const bannerUrl = MISSION_BANNERS[`../assets/${m.id}-banner.webp`];
+    if (bannerUrl) {
+      const wrapBanner = el('div', { class: 'mission-banner-wrap' });
+      const img = document.createElement('img');
+      img.src = bannerUrl;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.className = 'mission-banner';
+      wrapBanner.append(
+        img,
+        el('span', { class: 'mission-banner-tag', 'aria-hidden': 'true' }, '상상 일러스트'),
+      );
+      card.append(wrapBanner);
+    }
     card.append(el('b', {}, `${m.title} — ${m.question}`));
     card.append(el('span', {}, m.blurb));
     const thumb = document.createElement('canvas');

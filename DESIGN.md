@@ -6,6 +6,7 @@ colors:
   paper-deep: "#f1ede1"
   plate: "#ffffff"
   ink: "#16181a"
+  ink-deep: "#000000"
   ink-soft: "#2b3138"
   ink-faint: "#4a545e"
   hairline: "#d9d4c6"
@@ -48,6 +49,12 @@ typography:
     fontWeight: 400
     lineHeight: 1.6
     fontFeature: "tnum"
+  micro:
+    fontFamily: 'ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace'
+    fontSize: "0.75rem"
+    fontWeight: 400
+    lineHeight: 1.6
+    letterSpacing: "0.06em"
 rounded:
   sm: "4px"
   md: "8px"
@@ -118,6 +125,15 @@ components:
     textColor: "{colors.stamp}"
     rounded: "{rounded.md}"
     padding: "0.3rem 0.8rem"
+  mission-banner:
+    backgroundColor: "{colors.plate}"
+    textColor: "{colors.ink-faint}"
+    rounded: "{rounded.md}"
+    width: "100%"
+  planet-card:
+    backgroundColor: "{colors.plate}"
+    textColor: "{colors.ink}"
+    rounded: "{rounded.lg}"
 ---
 
 # Design System: exoplanet-signal-lab
@@ -185,6 +201,7 @@ Warm paper and ink do the work; blue signals the model, red stamps the verdict, 
 - **Body** (regular 400, base 1rem with 16px root, loose 1.6): explanations and hints, kept to a comfortable measure (68ch).
 - **Label** (regular 400, small 0.85rem, loose 1.6): legends, hints, mission summaries, and status lines.
 - **Mono-Measure** (regular 400, compact 0.9rem, tabular figures): readouts, metrics, table numerals, numeric entries, and plate tags with wide tracking (0.08em) and uppercase shape.
+- **Micro** (regular 400, compact 0.75rem, tracking 0.06em): mono tags, plate captions, and small registration labels; never body text.
 
 ### Named Rules
 **The Tabular Figures Rule.** Every measure, metric, table numeral, and numeric entry uses tabular figures so digits never jitter.
@@ -232,6 +249,13 @@ Ledger rows and instrument strips — calm, tabular, stamped.
 - **Character:** Plain white choice tiles that select like instruments.
 - **Shape:** Middle corner (10px) with comfortable padding (0.7rem 0.9rem), full width, left-aligned text.
 - **State:** Hover firms the border toward ink; pressed selection uses a heavier signal edge (2px) over a signal wash.
+- **Banner strip:** An optional imagination-illustration banner (wide strip, 16:6.6 crop, middle corner 8px, pale edge) sits above the title; a small mono tag ("상상 일러스트") rests in its top-left corner on a paper chip. The banner is decorative (empty alt); the tag is hidden from the assistive tree so the card name stays its title.
+
+### Imagination Gallery
+- **Character:** A plate of imaginary-world illustrations that teaches pictures are not evidence.
+- **Shape:** Square plates in an auto-fill grid (8.5rem minimum) with middle corners (10px), a pale edge, and a mono caption block; the illustration fills the full width at a 1:1 crop.
+- **Label:** Every card wears an amber outline tag ("상상도 · 가상") — the caution hue marks non-evidence, never stamp red; captions name the imagined world in Korean.
+- **Behavior:** The whole plate is omitted when no illustrations ship, so the ledger never shows an empty gallery.
 
 ### Ledger Fields
 - **Character:** Ruled rows pairing a slider with a mono numeric entry and a faint hint line.

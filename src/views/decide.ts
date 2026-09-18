@@ -6,6 +6,64 @@ import type { ExperimentRecord } from '../state';
 import type { LabSession } from './context';
 import { el, fmt, metric, notice } from './ui';
 
+// 상상도 자산 (assets/생성-가이드.md). 없으면 갤러리 섹션 자체를 그리지 않는다.
+const PLANET_IMAGES = import.meta.glob('../assets/planet-*.webp', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+}) as Record<string, string>;
+
+const PLANET_LABELS: Record<string, { name: string; alt: string }> = {
+  'planet-01-ocean': { name: '바다 상상', alt: '가상 행성 상상도: 바다와 구름이 있는 파란 행성 (관측 사진 아님)' },
+  'planet-02-desert': { name: '사막 상상', alt: '가상 행성 상상도: 모래 언덕과 얇은 대기가 있는 행성 (관측 사진 아님)' },
+  'planet-03-ice': { name: '얼음 상상', alt: '가상 행성 상상도: 얼음 표면과 금이 있는 행성 (관측 사진 아님)' },
+  'planet-04-ringed': { name: '고리 상상', alt: '가상 행성 상상도: 고리가 있는 행성 (관측 사진 아님)' },
+  'planet-05-clouded': { name: '구름 상상', alt: '가상 행성 상상도: 구름 띠로 덮인 행성 (관측 사진 아님)' },
+  'planet-06-twotone': { name: '한쪽만 낮인 상상', alt: '가상 행성 상상도: 한쪽은 낮, 한쪽은 밤이 계속되는 행성 (관측 사진 아님)' },
+};
+
+function buildImaginationGallery(): HTMLElement | null {
+  const ids = Object.keys(PLANET_IMAGES).sort();
+  if (ids.length === 0) return null;
+  const plate = el('div', { class: 'plate' });
+  plate.append(
+    el('div', { class: 'plate-head' },
+      el('span', { class: 'tag' }, 'Imagination plate'),
+      el('h3', {}, '상상도 갤러리 — 행성의 모습은 증거가 아닙니다'),
+    ),
+  );
+  plate.append(
+    el('p', { class: 'statusline' },
+      '아래 그림은 모두 상상 삽화입니다. 실제 관측 사진이 아니며, 미션의 정답(주기·반지름 비)과도 무관합니다. ' +
+      '후보를 판단하는 근거는 언제나 밝기 곡선과 잔차입니다.'),
+  );
+  const grid = el('div', { class: 'planet-grid' });
+  for (const path of ids) {
+    const id = path.split('/').pop()?.replace('.webp', '') ?? path;
+    const label = PLANET_LABELS[id];
+    const url = PLANET_IMAGES[path];
+    if (!url) continue;
+    const card = el('figure', { class: 'planet-card' });
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = label?.alt ?? '가상 행성 상상도 (관측 사진 아님)';
+    img.loading = 'lazy';
+    card.append(img);
+    const cap = el('figcaption', {});
+    cap.append(el('span', { class: 'planet-tag' }, '상상도 · 가상'));
+    cap.append(el('b', {}, label?.name ?? id));
+    card.append(cap);
+    grid.append(card);
+  }
+  plate.append(grid);
+  plate.append(
+    el('p', { class: 'hint statusline' },
+      'P0의 밝기 곡선 3종은 모두 수업용 합성 자료입니다. 실제 관측 자료 도입은 P1에서 이용 조건과 함께 검토합니다.'),
+  );
+  return plate;
+}
+
+
 export function buildCompareTab(session: LabSession): HTMLElement {
   const { state } = session;
   const wrap = el('div', { class: 'ledger' });
@@ -156,6 +214,9 @@ export function buildReportTab(session: LabSession): HTMLElement {
     '작은 잔차는 후보 모형과 자료의 일치도입니다. 존재의 증명으로 적지 마세요.'));
   wrap.append(ev);
 
+  const gallery = buildImaginationGallery();
+  if (gallery) wrap.append(gallery);
+
   const form = el('div', { class: 'plate' });
   form.append(el('h3', {}, '결론 기록'));
   const radios = el('div', { class: 'row', role: 'radiogroup', 'aria-label': '결론 선택' });
@@ -256,6 +317,7 @@ export interface ChangeEntry {
 
 export const CHANGELOG: ChangeEntry[] = [
   { date: '2026-09-17', text: '최초 개발: P0 합성 3종 미션, 원궤도 후보 비교, 관측 예산 3창, 결론 기록.' },
+  { date: '2026-09-18', text: '미션 배경·상상도 자산 파이프라인과 상상도 갤러리 슬롯 추가 (자산 준비 시 표시).' },
 ];
 
 /** 항상 찾을 수 있는 ‘업데이트 내역’ 다이얼로그 */
