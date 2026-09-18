@@ -1,0 +1,10 @@
+# deps & build
+node_modules/
+dist/
+
+# impeccable review captures (local evidence, not shipped)
+.impeccable/review/
+
+# OS & editor
+.DS_Store
+*.local
