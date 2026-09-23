@@ -1,5 +1,5 @@
 // 세션: 상태 + 후속관측 누적. 후보 변경은 원자료를 바꾸지 않는다.
-import { LabState } from '../state';
+import { LabState, loadPredictionState, loadSelectedMissionId, savePrediction, savePredictionDraft, saveSelectedMissionId } from '../state';
 import { getMission } from '../data/missions';
 import type { Mission } from '../data/missions';
 import type { FollowUp } from '../engine/observationWindows';
@@ -16,9 +16,12 @@ export class LabSession {
   private listeners = new Set<() => void>();
 
   constructor() {
-    const m = getMission('mission-1');
+    const m = getMission(loadSelectedMissionId());
     this.state.status = 'loading';
     this.state.missionId = m.id;
+    const predictionState = loadPredictionState(m.id);
+    this.state.predictionDraft = predictionState.draft;
+    this.state.prediction = predictionState.prediction;
     this.state.candidate = {
       periodDays: 4.2,
       radiusRatio: 0.1,
@@ -63,6 +66,20 @@ export class LabSession {
   selectMission(id: string): void {
     const m = getMission(id);
     this.state.setMission(id, m.truth.transitEpochDays);
+    saveSelectedMissionId(id);
+  }
+
+  setPredictionDraft(text: string): void {
+    this.state.predictionDraft = text;
+    savePredictionDraft(this.state.missionId, text);
+    this.state.emit();
+  }
+
+  savePrediction(text: string): void {
+    this.state.prediction = text;
+    this.state.predictionDraft = text;
+    savePrediction(this.state.missionId, text);
+    this.state.emit();
   }
 
   onRerender(fn: () => void): () => void {

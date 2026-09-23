@@ -105,6 +105,7 @@ p { margin: 0 0 0.75rem; max-width: 68ch; }
   background: var(--plate); border: 1px solid var(--hairline-strong);
   border-radius: var(--radius); padding: 1.5rem; margin: 1rem 0;
 }
+.start-steps { display: grid; gap: 0.35rem; padding-left: 1.4rem; margin: 0.25rem 0 1rem; }
 .lab-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 1rem; align-items: start; }
 @media (max-width: 900px) {
   .lab-grid { grid-template-columns: minmax(0, 1fr); }
@@ -133,6 +134,13 @@ p { margin: 0 0 0.75rem; max-width: 68ch; }
 .sw.obs { border-top: none; height: 0.6rem; width: 0.6rem; border-radius: 50%; background: var(--ink); display: inline-block; }
 
 canvas.curve { width: 100%; height: auto; display: block; border: 1px solid var(--hairline); border-radius: 8px; background: #fff; }
+.mission-preview { max-height: 5.5rem; margin-top: 0.35rem; }
+.selected-mission { display: grid; gap: 0.5rem; }
+.mission-detail-curve { max-height: 22rem; }
+.mission-selector { border: 1px solid var(--hairline-strong); border-radius: 10px; background: #fff; padding: 0.25rem 0.75rem 0.75rem; }
+.mission-selector > summary { cursor: pointer; display: flex; align-items: center; min-height: 44px; font-weight: 600; }
+.mission-selector[open] > summary { border-bottom: 1px solid var(--hairline); margin-bottom: 0.6rem; }
+.mission-selector:not([open]) > .missions { display: none; }
 
 /* ---- ledger rows / controls ---- */
 .ledger { display: grid; gap: 0.9rem; }
@@ -197,6 +205,13 @@ table.data th, table.data td { text-align: left; padding: 0.45rem 0.5rem; border
 table.data th { font-size: 0.75rem; letter-spacing: 0.04em; color: var(--ink-faint); font-weight: 600; }
 table.data td.num, table.data th.num { text-align: right; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 .table-wrap { overflow-x: auto; }
+.compare-cards { display: none; }
+.compare-card { border: 1px solid var(--hairline-strong); border-radius: 10px; background: #fff; padding: 0.8rem; }
+.compare-card dl { display: grid; grid-template-columns: minmax(8rem, 1fr) 1.2fr; gap: 0.3rem 0.65rem; margin: 0.6rem 0; }
+.compare-card dt { color: var(--ink-soft); }
+.compare-card dd { margin: 0; font-family: var(--font-mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.reference-gallery { padding: 0.75rem; border: 1px solid var(--hairline-strong); border-radius: 10px; background: #fff; }
+.reference-gallery > summary { cursor: pointer; font-weight: 600; min-height: 44px; display: flex; align-items: center; }
 
 .stamp {
   display: inline-block; border: 2px solid var(--stamp); color: var(--stamp);
@@ -239,6 +254,13 @@ table.data td.num, table.data th.num { text-align: right; font-family: var(--fon
 .planet-tag {
   justify-self: start; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.06em;
   border: 1px solid var(--amber); color: var(--amber); border-radius: 4px; padding: 0.05rem 0.35rem;
+}
+
+@media (max-width: 680px) {
+  .compare-table { display: none; }
+  .table-wrap:has(.compare-table) { display: none; }
+  .compare-cards { display: grid; gap: 0.65rem; }
+  .mission-detail-curve { max-height: none; }
 }
 
 .scrub { display: grid; gap: 0.3rem; }

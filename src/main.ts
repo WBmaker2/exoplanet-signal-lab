@@ -19,6 +19,7 @@ const TABS: Array<{ id: TabId; label: string }> = [
 const session = new LabSession();
 let started = false;
 let active: TabId = 'observe';
+let navigationMessage = '';
 
 function boot(): void {
   const app = document.getElementById('app');
@@ -40,6 +41,15 @@ function boot(): void {
     b.textContent = t.label;
     if (t.id === active) b.setAttribute('aria-current', 'step');
     b.addEventListener('click', () => {
+      const predictionNeedsSave = !session.state.prediction ||
+        session.state.predictionDraft.trim() !== session.state.prediction;
+      if (started && t.id !== 'observe' && predictionNeedsSave) {
+        active = 'observe';
+        navigationMessage = '다음 단계로 가기 전에 관측 탭에서 예측을 입력하고 저장해 주세요.';
+        render();
+        return;
+      }
+      navigationMessage = '';
       active = t.id;
       render();
     });
@@ -73,7 +83,14 @@ function boot(): void {
   render();
 
   session.onRerender(() => render());
-  session.state.subscribe(() => placeAura());
+  session.state.subscribe(() => {
+    const { prediction, predictionDraft } = session.state;
+    if (prediction && predictionDraft.trim() === prediction) {
+      navigationMessage = '';
+      document.querySelector('.navigation-block-message')?.remove();
+    }
+    placeAura();
+  });
 }
 
 function render(): void {
@@ -88,9 +105,13 @@ function render(): void {
   });
 
   if (!started) {
-    sheet.append(startCard());
+    sheet.append(startCard(session.mission().title));
     placeAura();
     return;
+  }
+
+  if (navigationMessage) {
+    sheet.append(el('p', { class: 'notice bad navigation-block-message', role: 'status' }, navigationMessage));
   }
 
   const builders: Record<TabId, () => HTMLElement> = {
@@ -118,14 +139,18 @@ function teardown(sheet: Element): void {
 }
 
 /** 첫 화면: 질문 하나 + 시작 버튼 하나 */
-function startCard(): HTMLElement {
+function startCard(selectedMissionTitle: string): HTMLElement {
   const card = el('section', { class: 'start-card', 'aria-labelledby': 'q' });
   card.append(el('h1', { id: 'q' }, '별빛이 어두워졌다는 사실만으로, 행성이 있다고 말할 수 있을까?'));
   card.append(
     el('p', {},
-      '30분 수사: 반복되는 감소를 고르고 → 후보 모형을 맞추고 → 3D에서 빗겨가는 궤도와 비교하고 → ' +
-      '3개의 관측 창으로 다음 증거를 노린 뒤, ‘행성 후보’와 ‘추가 검증 필요’를 갈라 보고합니다.'),
+      `현재 ‘${selectedMissionTitle}’ 미션이 선택돼 있습니다. 필요하면 미션을 바꾸고, 그래프의 밝기 변화가 행성 때문인지 자료를 살펴봅니다.`),
   );
+  const steps = el('ol', { class: 'start-steps' });
+  for (const label of ['선택된 미션을 확인하고 예측을 적습니다.', '관측 자료에 후보 모형을 맞춥니다.', '후보와 다음 관측 계획을 비교합니다.', '근거와 아직 모르는 점을 보고합니다.']) {
+    steps.append(el('li', {}, label));
+  }
+  card.append(steps);
   const start = el('button', { class: 'btn primary signal', type: 'button', id: 'start-btn' }, '수사 시작하기');
   start.addEventListener('click', () => {
     started = true;
@@ -137,7 +162,7 @@ function startCard(): HTMLElement {
   card.append(start);
   card.append(
     el('p', { class: 'statusline' },
-      '밝은 교실 화면 · 키보드만으로 전 과정 가능 · 모션 축소 시 정적 테두리 · VoiceOver 검증은 범위 밖입니다.'),
+      '밝은 교실 화면 · 키보드로 조작 가능 · 모션 축소 설정에서는 정적 강조 테두리를 사용합니다.'),
   );
   return card;
 }
@@ -149,7 +174,7 @@ function placeAura(): void {
   let target: HTMLElement | null = null;
   if (!started) {
     target = document.getElementById('start-btn');
-  } else if (active === 'observe' && !state.prediction) {
+  } else if (active === 'observe' && (!state.prediction || state.predictionDraft.trim() !== state.prediction)) {
     target = document.querySelector('.plate .btn.signal');
   } else if (active === 'fit' && state.saved.length === 0) {
     target = document.getElementById('save-candidate');

@@ -17,9 +17,9 @@ const RESID = '#8a5a00';
 
 export function renderCurve(canvas: HTMLCanvasElement, d: CurveData): void {
   const dpr = Math.min(2, window.devicePixelRatio || 1);
-  const W = 720;
-  const H = 300;
-  const RH = 90; // 잔차 띠
+  const W = Math.max(280, canvas.clientWidth || 720);
+  const H = Math.round(W * 300 / 720);
+  const RH = Math.round(W * 90 / 720); // 잔차 띠
   canvas.width = W * dpr;
   canvas.height = (H + RH) * dpr;
   canvas.style.aspectRatio = `${W} / ${H + RH}`;
@@ -61,7 +61,7 @@ export function renderCurve(canvas: HTMLCanvasElement, d: CurveData): void {
   ctx.strokeStyle = '#e3ded1';
   ctx.lineWidth = 1;
   ctx.fillStyle = '#4a545e';
-  ctx.font = '11px ui-monospace, monospace';
+  ctx.font = '12px ui-monospace, monospace';
   for (let g = 0; g <= 4; g += 1) {
     const f = fMin + ((fMax - fMin) * g) / 4;
     const y = Y(f);

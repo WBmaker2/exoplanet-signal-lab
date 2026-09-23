@@ -1,6 +1,8 @@
 // 비교 · 일정 · 보고 탭 + 업데이트 내역.
 import { canSelect, followUpInWindow, remainingBudget } from '../engine/observationWindows';
-import { indistinguishable } from '../engine/fitMetrics';
+import { fit, indistinguishable } from '../engine/fitMetrics';
+import { predictCurve } from '../engine/lightCurve';
+import { getMission } from '../data/missions';
 import { loadPersisted, savePersisted, downloadJson } from '../state';
 import type { ExperimentRecord } from '../state';
 import type { LabSession } from './context';
@@ -28,7 +30,7 @@ function buildImaginationGallery(): HTMLElement | null {
   const plate = el('div', { class: 'plate' });
   plate.append(
     el('div', { class: 'plate-head' },
-      el('span', { class: 'tag' }, 'Imagination plate'),
+      el('span', { class: 'tag' }, '상상도 자료'),
       el('h3', {}, '상상도 갤러리 — 행성의 모습은 증거가 아닙니다'),
     ),
   );
@@ -56,33 +58,35 @@ function buildImaginationGallery(): HTMLElement | null {
     grid.append(card);
   }
   plate.append(grid);
-  plate.append(
-    el('p', { class: 'hint statusline' },
-      'P0의 밝기 곡선 3종은 모두 수업용 합성 자료입니다. 실제 관측 자료 도입은 P1에서 이용 조건과 함께 검토합니다.'),
-  );
+  plate.append(el('p', { class: 'hint statusline' }, '밝기 곡선은 수업용 합성 자료이며, 상상도는 관측 자료나 후보 판단 근거가 아닙니다.'));
   return plate;
 }
 
 
 export function buildCompareTab(session: LabSession): HTMLElement {
   const { state } = session;
+  const mission = session.mission();
+  const obs = session.observations();
+  const currentFits = state.saved.map((saved) => fit(
+    obs.fluxes, predictCurve(obs.times, mission.star, saved.params), obs.sigmas, 4,
+  ));
   const wrap = el('div', { class: 'ledger' });
   wrap.append(
     el('p', { class: 'statusline' },
-      '3단계 · 저장한 후보들을 나란히 놓고 잔차로 비교하세요. 허용 잔차를 만족하면 둘 다 인정됩니다.'),
+      '3단계 · 저장한 후보가 현재 관측 자료와 얼마나 잘 맞는지 살펴보세요. 두 후보의 결과 차이가 작으면 지금 자료만으로는 구별하기 어렵습니다.'),
   );
   if (state.saved.length === 0) {
     wrap.append(notice('',
-      '아직 저장된 후보가 없습니다. 후보 탭에서 모형을 맞춘 뒤 ‘후보 저장 → 비교로’를 눌러보세요. 2개 이상 저장하면 구분 가능 여부를 알려드립니다.'));
+      '아직 저장된 후보가 없습니다. 후보 탭에서 모형을 맞춘 뒤 ‘후보 저장’을 눌러보세요. 2개 이상 저장하면 구분 가능 여부를 알려드립니다.'));
     return wrap;
   }
   const tableWrap = el('div', { class: 'table-wrap' });
   const table = document.createElement('table');
-  table.className = 'data';
+  table.className = 'data compare-table';
   const thead = document.createElement('thead');
   const hr = document.createElement('tr');
-  for (const [t, num] of [['#', false], ['주기 P (일)', true], ['반지름 비 k', true], ['기울기 i (°)', true],
-    ['t0 (일)', true], ['χ²/RMSE', true], ['적합도', true], ['', false]] as const) {
+  for (const [t, num] of [['후보', false], ['주기 P (일)', true], ['반지름 비 k', true], ['기울기 i (°)', true],
+    ['t0 (일)', true], ['저장 당시 적합도', true], ['저장 당시 자료점', true], ['현재 자료 적합도', true], ['', false]] as const) {
     const th = document.createElement('th');
     th.textContent = t;
     if (num) th.className = 'num';
@@ -92,21 +96,25 @@ export function buildCompareTab(session: LabSession): HTMLElement {
   thead.append(hr);
   table.append(thead);
   const tbody = document.createElement('tbody');
+  const cards = el('div', { class: 'compare-cards', 'aria-label': '후보별 비교 결과' });
   state.saved.forEach((s, i) => {
     const tr = document.createElement('tr');
+    const now = currentFits[i];
     const cells: string[] = [
-      String(i + 1),
+      `후보 ${i + 1}`,
       fmt(s.params.periodDays, 2),
       fmt(s.params.radiusRatio, 4),
       fmt(s.params.inclinationDeg, 2),
       fmt(s.params.transitEpochDays, 2),
-      s.fit.kind === 'chi2' ? fmt(s.fit.value, 1) : fmt(s.fit.value, 5),
-      s.fit.kind === 'chi2' ? `χ²/자유도 ${fmt(s.fit.reduced, 2)}` : 'RMSE 기준',
+      `${s.fit.kind === 'chi2' ? `χ² ${fmt(s.fit.value, 1)} (χ²/자유도 ${fmt(s.fit.reduced, 2)})` : `RMSE ${fmt(s.fit.value, 5)}`}`,
+      `${s.observations}개`,
+      now ? (now.kind === 'chi2' ? `χ² ${fmt(now.value, 1)} (χ²/자유도 ${fmt(now.reduced, 2)})` : `RMSE ${fmt(now.value, 5)}`) : '—',
     ];
     cells.forEach((c, ci) => {
       const td = document.createElement('td');
       td.textContent = c;
-      if (ci > 0) td.className = 'num';
+      td.dataset.label = ['후보', '주기 P (일)', '반지름 비 k', '기울기 i (°)', 't0 (일)', '저장 당시 적합도', '저장 당시 자료점', `현재 자료 적합도 (n=${obs.times.length})`][ci] ?? '';
+      if (ci > 0 && ci < 5) td.className = 'num';
       tr.append(td);
     });
     const act = document.createElement('td');
@@ -124,25 +132,48 @@ export function buildCompareTab(session: LabSession): HTMLElement {
     const box = el('div', { class: 'row' });
     box.append(load, del);
     act.append(box);
+    act.dataset.label = '후보 조작';
     tr.append(act);
     tbody.append(tr);
+
+    const card = el('article', { class: 'compare-card' });
+    card.append(el('h3', {}, `후보 ${i + 1}`));
+    const details: Array<[string, string]> = [
+      ['주기 P', `${fmt(s.params.periodDays, 2)}일`], ['반지름 비 k', fmt(s.params.radiusRatio, 4)],
+      ['기울기 i', `${fmt(s.params.inclinationDeg, 2)}°`], ['통과 중심 t0', `${fmt(s.params.transitEpochDays, 2)}일`],
+      ['저장 당시 적합도', cells[5] ?? ''], ['저장 당시 자료점', `${s.observations}개`],
+      [`현재 자료 적합도 · ${obs.times.length}개 자료`, now ? (now.kind === 'chi2' ? `χ² ${fmt(now.value, 1)} (χ²/자유도 ${fmt(now.reduced, 2)})` : `RMSE ${fmt(now.value, 5)}`) : '—'],
+    ];
+    const dl = document.createElement('dl');
+    for (const [label, value] of details) dl.append(el('dt', {}, label), el('dd', {}, value));
+    card.append(dl);
+    const cardActions = el('div', { class: 'row' });
+    const cardLoad = el('button', { class: 'btn', type: 'button' }, '불러오기');
+    cardLoad.addEventListener('click', () => { state.updateCandidate({ ...s.params }); session.rerender(); });
+    const cardDelete = el('button', { class: 'btn danger', type: 'button' }, '삭제');
+    cardDelete.addEventListener('click', () => { state.saved.splice(i, 1); state.emit(); session.rerender(); });
+    cardActions.append(cardLoad, cardDelete);
+    card.append(cardActions);
+    cards.append(card);
   });
   table.append(tbody);
   tableWrap.append(table);
-  wrap.append(tableWrap);
+  wrap.append(el('p', { class: 'statusline' }, `저장 당시 적합도와 자료 수는 각 후보를 저장한 시점의 기록입니다. 현재 자료 적합도는 모든 후보를 같은 ${obs.times.length}개 관측점으로 다시 계산했습니다.`));
+  wrap.append(el('p', { class: 'hint statusline' }, '차이 점수(χ²)는 후보 모형이 관측 밝기에서 얼마나 벗어나는지 요약합니다. 점수가 낮을수록 관측 자료와 더 잘 맞습니다. χ²/자유도는 자료점 수를 고려해 함께 보는 값입니다.'));
+  wrap.append(tableWrap, cards);
 
   if (state.saved.length >= 2) {
     const pairs: string[] = [];
     for (let a = 0; a < state.saved.length; a += 1) {
       for (let b = a + 1; b < state.saved.length; b += 1) {
-        const fa = state.saved[a]?.fit;
-        const fb = state.saved[b]?.fit;
+        const fa = currentFits[a];
+        const fb = currentFits[b];
         if (fa && fb && indistinguishable(fa, fb)) pairs.push(`${a + 1}번–${b + 1}번`);
       }
     }
     wrap.append(pairs.length > 0
-      ? notice('info', `관측상 구분 불가: ${pairs.join(', ')} (|Δχ²|≤9, 교실용 기준). 두 후보를 함께 인정하고, 다음 관측으로 가를 이유를 일정 탭에서 찾으세요.`)
-      : notice('', '저장된 후보들은 현재 자료에서 서로 구분됩니다. 그래도 작은 잔차는 일치도일 뿐, 존재의 증명이 아닙니다.'));
+      ? notice('info', `현재 관측 자료에서는 ${pairs.join(', ')} 후보의 결과 차이가 작아 구별하기 어렵습니다. 일정 탭에서 다음 관측으로 차이를 확인할 방법을 찾아보세요.`)
+      : notice('', '현재 관측 자료에서는 후보들의 결과 차이가 드러납니다. 모형과 자료가 잘 맞는다는 사실만으로 행성의 존재가 증명되지는 않습니다.'));
   } else {
     wrap.append(notice('', '후보를 하나 더 저장하면(조건을 바꿔 저장) 구분 가능 여부를 판정해 드립니다.'));
   }
@@ -203,7 +234,7 @@ export function buildReportTab(session: LabSession): HTMLElement {
   ev.append(el('h3', {}, '증거 묶음 (자동 정리)'));
   const rows = el('div', { class: 'row' });
   rows.append(
-    metric('미션', mission.id),
+    metric('미션', mission.title),
     metric('관측 전 예측', state.prediction || '(없음)'),
     metric('저장 후보', `${state.saved.length}개`),
     metric('관측 창', `${state.windows.length}/3 사용`),
@@ -213,9 +244,6 @@ export function buildReportTab(session: LabSession): HTMLElement {
   ev.append(el('p', { class: 'statusline' },
     '작은 잔차는 후보 모형과 자료의 일치도입니다. 존재의 증명으로 적지 마세요.'));
   wrap.append(ev);
-
-  const gallery = buildImaginationGallery();
-  if (gallery) wrap.append(gallery);
 
   const form = el('div', { class: 'plate' });
   form.append(el('h3', {}, '결론 기록'));
@@ -288,6 +316,16 @@ export function buildReportTab(session: LabSession): HTMLElement {
   form.append(btnRow, msg);
   wrap.append(form);
 
+  const gallery = buildImaginationGallery();
+  if (gallery) {
+    const reference = document.createElement('details');
+    reference.className = 'reference-gallery';
+    const summary = document.createElement('summary');
+    summary.textContent = '참고 자료: 상상도 갤러리 (행성의 모습은 증거가 아닙니다)';
+    reference.append(summary, gallery);
+    wrap.append(reference);
+  }
+
   const hist = el('div', { class: 'plate' });
   hist.append(el('h3', {}, '이 브라우저의 실험 기록'));
   const recList = el('div', { class: 'ledger' });
@@ -302,8 +340,10 @@ export function buildReportTab(session: LabSession): HTMLElement {
       return;
     }
     for (const r of all.slice(-8).reverse()) {
+      let missionTitle = r.scenarioId;
+      try { missionTitle = getMission(r.scenarioId).title; } catch { /* 기존/알 수 없는 기록은 원래 이름 유지 */ }
       recList.append(el('p', { class: 'statusline' },
-        `${r.createdAt} · ${r.scenarioId} · P=${fmt(r.parameters.periodDays, 2)}일 k=${fmt(r.parameters.radiusRatio, 3)} i=${fmt(r.parameters.inclinationDeg, 1)}° · ${r.explanation}`));
+        `${r.createdAt} · ${missionTitle} · P=${fmt(r.parameters.periodDays, 2)}일 k=${fmt(r.parameters.radiusRatio, 3)} i=${fmt(r.parameters.inclinationDeg, 1)}° · ${r.explanation}`));
     }
   }
   renderRecords();
@@ -316,10 +356,11 @@ export interface ChangeEntry {
 }
 
 export const CHANGELOG: ChangeEntry[] = [
-  { date: '2026-09-17', text: '최초 개발: P0 합성 3종 미션, 원궤도 후보 비교, 관측 예산 3창, 결론 기록.' },
+  { date: '2026-09-17', text: '최초 개발: 합성 자료 3종 미션, 원궤도 후보 비교, 관측 예산 3창, 결론 기록.' },
   { date: '2026-09-18', text: '미션 배경·상상도 자산 파이프라인과 상상도 갤러리 슬롯 추가 (자산 준비 시 표시).' },
   { date: '2026-09-18', text: '미션 배경 상상 일러스트 3장 삽입 (Nano Banana 2 Lite 생성).' },
   { date: '2026-09-18', text: '가상 행성 상상도 6장 삽입, 보고 탭 상상도 갤러리 표시 (Nano Banana 2 Lite 생성).' },
+  { date: '2026-09-23', text: '미션별 예측·초안 복구, 현재 자료 기준 후보 비교, 예측 입력을 앞당기고 선택 미션 및 접힌 미션 목록 표시를 개선.' },
 ];
 
 /** 항상 찾을 수 있는 ‘업데이트 내역’ 다이얼로그 */

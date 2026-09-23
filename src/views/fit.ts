@@ -22,7 +22,7 @@ export function buildFitTab(session: LabSession): HTMLElement {
   const left = el('div', { class: 'plate' });
   left.append(
     el('div', { class: 'plate-head' },
-      el('span', { class: 'tag' }, 'Curve plate'),
+      el('span', { class: 'tag' }, '밝기 곡선'),
       el('h2', {}, '관측 · 모형 · 잔차'),
     ),
   );
@@ -55,7 +55,7 @@ export function buildFitTab(session: LabSession): HTMLElement {
   const right = el('div', { class: 'plate' });
   right.append(
     el('div', { class: 'plate-head' },
-      el('span', { class: 'tag' }, 'Condition ledger'),
+      el('span', { class: 'tag' }, '모형 조건'),
       el('h2', {}, '후보 모형 조절'),
     ),
   );
@@ -63,6 +63,7 @@ export function buildFitTab(session: LabSession): HTMLElement {
   right.append(ledger);
   const errBox = el('div', {});
   right.append(errBox);
+  const controlRefs = new Map<string, { slider: HTMLInputElement; num: HTMLInputElement }>();
 
   const mission = session.mission();
   const [span0, span1] = mission.spanDays;
@@ -94,6 +95,7 @@ export function buildFitTab(session: LabSession): HTMLElement {
     num.step = String(step);
     num.value = String(state.candidate[key]);
     num.setAttribute('aria-label', `${label} 숫자 입력`);
+    controlRefs.set(key, { slider, num });
     slider.addEventListener('input', () => {
       const v = Number(slider.value);
       if (Number.isFinite(v)) {
@@ -127,14 +129,15 @@ export function buildFitTab(session: LabSession): HTMLElement {
     '모형 감소가 관측 감소와 같은 시각에 오도록');
 
   const btnRow = el('div', { class: 'row' });
-  const saveBtn = el('button', { class: 'btn signal', type: 'button', id: 'save-candidate' }, '후보 저장 → 비교로');
+  const saveBtn = el('button', { class: 'btn signal', type: 'button', id: 'save-candidate' }, '후보 저장');
+  const saveFeedback = el('p', { class: 'statusline', role: 'status' });
   saveBtn.addEventListener('click', () => {
     const obs = session.observations();
     const model = predictCurve(obs.times, mission.star, state.candidate);
     const f = fit(obs.fluxes, model, obs.sigmas, 4);
-    state.saved.push({ params: { ...state.candidate }, fit: f, note: `저장 ${state.saved.length + 1}` });
-    state.markCompared();
-    session.rerender();
+    state.saved.push({ params: { ...state.candidate }, fit: f, observations: obs.times.length, note: `저장 ${state.saved.length + 1}` });
+    saveFeedback.textContent = `후보 ${state.saved.length}번을 ${obs.times.length}개 관측 자료로 저장했습니다. 비교 탭에서 확인할 수 있습니다.`;
+    state.emit();
   });
   const resetBtn = el('button', { class: 'btn', type: 'button' }, '초기값으로');
   resetBtn.addEventListener('click', () => {
@@ -146,13 +149,13 @@ export function buildFitTab(session: LabSession): HTMLElement {
     });
   });
   btnRow.append(saveBtn, resetBtn);
-  right.append(btnRow);
+  right.append(btnRow, saveFeedback);
 
   // ---------- 시간 탐색 + 3D + 겹침 ----------
   const scrubPlate = el('div', { class: 'plate', style: 'margin-top:1rem' });
   scrubPlate.append(
     el('div', { class: 'plate-head' },
-      el('span', { class: 'tag' }, 'Time scrub'),
+      el('span', { class: 'tag' }, '시간 탐색'),
       el('h2', {}, '같은 시각 함께 보기'),
     ),
   );
@@ -216,10 +219,32 @@ export function buildFitTab(session: LabSession): HTMLElement {
       refresh();
     });
   }
+  let lastCanvasWidth = 0;
+  const refreshForWidth = () => {
+    const width = canvas.clientWidth;
+    if (width > 0 && width !== lastCanvasWidth) {
+      lastCanvasWidth = width;
+      requestRefresh();
+    }
+  };
+  const resizeObserver = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(refreshForWidth);
+  resizeObserver?.observe(canvas);
+  window.addEventListener('resize', refreshForWidth);
+  disposers.push(() => {
+    resizeObserver?.disconnect();
+    window.removeEventListener('resize', refreshForWidth);
+  });
   function refresh(): void {
+    const canvasWidth = canvas.clientWidth;
+    if (canvasWidth > 0) lastCanvasWidth = canvasWidth;
     const m = session.mission();
     const obs = session.observations();
     const cand = state.candidate;
+    controlRefs.forEach((refs, key) => {
+      const value = String(cand[key as keyof typeof cand]);
+      if (refs.slider.value !== value) refs.slider.value = value;
+      if (refs.num.value !== value) refs.num.value = value;
+    });
     const model = predictCurve(obs.times, m.star, cand);
     const dense = denseGrid(obs.times, 360);
     const denseM = predictCurve(dense, m.star, cand);
@@ -269,7 +294,7 @@ export function buildFitTab(session: LabSession): HTMLElement {
   }
 
   disposers.push(state.subscribe(requestRefresh));
-  refresh();
+  requestRefresh();
   return root;
 }
 
